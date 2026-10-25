@@ -27,28 +27,41 @@ Fonts:
 body {
     display: flex;
     justify-content: center;
-    align-items: center;
     min-height: 100vh;
-    background-color: #f0f0f0;
+    padding: 24px 16px;
+    background-color: #f7f5ef;
     font-family: Arial, sans-serif;
 }
 
 .game-wrapper {
+    width: min(800px, 95vw);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
+}
+
+.game-header {
+    width: 100%;
+    text-align: center;
+}
+
+.brand-logo {
+    width: 190px;
+    height: auto;
+    margin-bottom: 8px;
 }
 
 .score-panel {
-    display: flex;
-    justify-content: space-between;  /* Space between score and button */
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
     align-items: center;
-    width: 800px;
-    padding: 10px;
+    gap: 16px;
+    width: 100%;
+    padding: 12px 16px;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .timer {
@@ -58,28 +71,61 @@ body {
 }
 
 #game-container {
-    width: 800px;
-    height: 600px;
-    background-color: #e6f7ff;
-    border: 2px solid #333;
+    width: 100%;
+    height: min(600px, 62vh);
+    min-height: 360px;
+    background: linear-gradient(180deg, #dff3ff 0%, #effaff 100%);
+    border: 3px solid #ffc907;
     border-radius: 8px;
     position: relative;
     overflow: hidden;
 }
 
+#feedback {
+    position: absolute;
+    left: 50%;
+    top: 16px;
+    z-index: 2;
+    width: calc(100% - 32px);
+    transform: translateX(-50%);
+    padding: 9px 12px;
+    text-align: center;
+    font-weight: bold;
+    color: #1a1a1a;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+#feedback.positive {
+    color: #159a48;
+}
+
+#feedback.negative {
+    color: #a82b1d;
+}
+
 
 #start-btn {
-    padding: 8px 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
+    min-width: 130px;
+    padding: 10px 16px;
+    background-color: #ffc907;
+    color: #1a1a1a;
+    border: 2px solid #ffc907;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    font-weight: bold;
 }
 
-#start-btn:hover {
-    background-color: #45a049;
+#start-btn:hover:not(:disabled) {
+    background-color: #e5b400;
+    border-color: #e5b400;
+}
+
+#start-btn:disabled {
+    cursor: default;
+    opacity: 0.65;
 }
 
 .score {
@@ -90,24 +136,28 @@ body {
 
 .water-drop {
     position: absolute;
-    width: 60px;  /* increased from 40px */
-    height: 60px; /* increased from 40px */
-    background-color: #0099ff;
-    border-radius: 50%;
+    top: -72px;
+    border: 0;
+    border-radius: 50% 50% 52% 52%;
     animation: dropFall linear forwards;
     transform-origin: center;
     cursor: pointer;
-    padding: 15px;  /* Add padding for larger click area */
-    margin: -15px;  /* Offset padding to maintain visual size */
-    transition: transform 0.1s ease;  /* Smooth hover effect */
+    touch-action: manipulation;
+    transition: filter 0.1s ease, transform 0.1s ease;
 }
 
-.water-drop:hover {
-    transform: scale(1.1);  /* Slight grow effect on hover */
+.clean-drop {
+    background: radial-gradient(circle at 32% 28%, #ffffff 0 9%, #8bd1cb 10% 24%, #2e9df7 25% 100%);
+    box-shadow: 0 4px 8px rgba(46, 157, 247, 0.35);
 }
 
 .bad-drop {
-    background-color: #ff4444;
+    background: radial-gradient(circle at 32% 28%, #ffc907 0 10%, #8b5b3d 11% 100%);
+    box-shadow: 0 4px 8px rgba(70, 45, 32, 0.35);
+}
+
+.water-drop:hover {
+    filter: brightness(1.08);
 }
 
 .game-title {
@@ -127,19 +177,44 @@ body {
 
 @keyframes dropFall {
     from {
-        transform: translateY(-20px);
+        transform: translateY(0);
     }
     to {
-        transform: translateY(600px);
+        transform: translateY(var(--fall-distance));
     }
 }
 
 @media (max-width: 850px) {
-    .game-wrapper, .score-panel, #game-container {
-        width: 95vw;
+    body {
+        padding: 16px 10px;
     }
-    
+
     #game-container {
-        height: 70vh;
+        height: 62vh;
+    }
+}
+
+@media (max-width: 520px) {
+    .game-title {
+        font-size: 38px;
+    }
+
+    .game-tagline {
+        font-size: 16px;
+    }
+
+    .score-panel {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .score,
+    .timer {
+        font-size: 20px;
+    }
+
+    #start-btn {
+        grid-column: 1 / -1;
+        width: 100%;
     }
 }
